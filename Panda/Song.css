@@ -1,0 +1,121 @@
+body {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+
+    background-image: url('Cute Photos/Background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Center content */
+.holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 6vh;
+    gap: 10px;
+}
+
+/* Title */
+h1 {
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+}
+
+/* Video */
+video {
+    height: 300px;
+    width: 500px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+}
+
+.below{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 56vh;
+    margin-top: 2vh;
+}
+
+b{
+    font-family: 'Pacifico', cursive;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+}
+
+p{
+    font-family: 'Pacifico', cursive;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+}
+
+i{
+    font-family: 'Pacifico', cursive;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    position: absolute;
+    margin-top: 17vh;
+    margin-left: 70vh;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 2px solid rgb(0, 0, 0);
+    cursor: pointer;
+    background-color: #ff6f91;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s ease;
+    margin-top: 13vh;
+}
+
+button:hover {
+    background-color: #ff91ac;
+    transform: scale(1.08);
+}
+
+a{
+    text-decoration: none;
+}
+
+
+/* ===== HEARTS ===== */
+#hearts-container {
+    position: fixed;
+    top: 0vh;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.heart {
+    position: absolute;
+    color: #ff6f91;
+    animation-name: fall;
+    animation-timing-function: linear;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateX(0) translateY(-50px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(var(--sway)) translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}

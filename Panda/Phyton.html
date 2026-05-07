@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Borrowing System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h2>Borrowing System</h2>
+
+<!-- Item List -->
+<h3>Items</h3>
+<ul id="itemList"></ul>
+
+<!-- Check Out -->
+<h3>Check Out</h3>
+<input type="text" id="name" placeholder="Name"><br>
+<input type="text" id="item" placeholder="Item"><br>
+<input type="date" id="borrowDate"><br>
+<input type="date" id="returnDate"><br>
+<button onclick="checkOut()">Check Out</button>
+
+<!-- Check In -->
+<h3>Check In</h3>
+<input type="text" id="returnName" placeholder="Name"><br>
+<input type="text" id="returnItem" placeholder="Item"><br>
+<select id="condition">
+    <option>Good</option>
+    <option>Needs Maintenance</option>
+</select><br>
+<button onclick="checkIn()">Check In</button>
+
+<!-- Overdue -->
+<h3>Overdue Report</h3>
+<button onclick="overdue()">Check Overdue</button>
+<ul id="overdueList"></ul>
+
+<!-- Graph -->
+<h3>Usage Graph</h3>
+<canvas id="chart" width="400" height="200"></canvas>
+
+<script>
+let items = ["Laptop", "Projector", "Camera"];
+let usage = {"Laptop":0, "Projector":0, "Camera":0};
+let borrowed = [];
+
+// Display items
+function showItems(){
+    let list = document.getElementById("itemList");
+    list.innerHTML = "";
+    items.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = item + " (Used: " + usage[item] + ")";
+        list.appendChild(li);
+    });
+}
+
+// Check Out
+function checkOut(){
+    let name = document.getElementById("name").value;
+    let item = document.getElementById("item").value;
+    let borrowDate = document.getElementById("borrowDate").value;
+    let returnDate = document.getElementById("returnDate").value;
+
+    if(!items.includes(item)){
+        alert("Item not found");
+        return;
+    }
+
+    if(borrowed.find(x => x.item === item)){
+        alert("Item already borrowed");
+        return;
+    }
+
+    borrowed.push({name, item, borrowDate, returnDate});
+    usage[item]++;
+
+    alert("Borrowed successfully!");
+    showItems();
+    updateChart();
+}
+
+// Check In
+function checkIn(){
+    let name = document.getElementById("returnName").value;
+    let item = document.getElementById("returnItem").value;
+    let condition = document.getElementById("condition").value;
+
+    let index = borrowed.findIndex(x => x.name === name && x.item === item);
+
+    if(index !== -1){
+        borrowed.splice(index,1);
+        alert("Returned! Condition: " + condition);
+    } else {
+        alert("No record found");
+    }
+}
+
+// Overdue
+function overdue(){
+    let today = new Date();
+    let list = document.getElementById("overdueList");
+    list.innerHTML = "";
+
+    borrowed.forEach(x => {
+        let returnDate = new Date(x.returnDate);
+        if(today > returnDate){
+            let li = document.createElement("li");
+            li.textContent = x.item + " - " + x.name;
+            list.appendChild(li);
+        }
+    });
+
+    if(list.innerHTML === ""){
+        list.innerHTML = "<li>No overdue items</li>";
+    }
+}
+
+// Chart
+let chart = new Chart(document.getElementById("chart"), {
+    type: "bar",
+    data: {
+        labels: items,
+        datasets: [{
+            label: "Usage Count",
+            data: items.map(i => usage[i])
+        }]
+    }
+});
+
+function updateChart(){
+    chart.data.datasets[0].data = items.map(i => usage[i]);
+    chart.update();
+}
+
+// Init
+showItems();
+</script>
+
+</body>
+</html>

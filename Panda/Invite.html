@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Panda Pixel</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0c0b0b;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+
+      background-image: url('Cute Photos/Background.jpg'); /* Replace with your image path */
+    background-size: cover; /* Makes the image cover entire body */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents tiling */
+    }
+
+    #canvas {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: rgb(0, 115, 0);
+      z-index: 1;
+      border-radius: 20px;
+      border: 2px solid rgb(0, 0, 0);
+    }
+
+    #leavesCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <canvas id="leavesCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const leavesCanvas = document.getElementById('leavesCanvas');
+    const lctx = leavesCanvas.getContext('2d');
+
+    leavesCanvas.width = window.innerWidth;
+    leavesCanvas.height = window.innerHeight;
+
+    const pixelSize = 10;
+
+    // Leaves + hearts
+    const leaves = Array.from({ length: 40 }, () => ({
+      x: Math.random() * leavesCanvas.width,
+      y: Math.random() * leavesCanvas.height,
+      size: Math.random() * 6 + 4,
+      speed: Math.random() * 1 + 0.5,
+      drift: (Math.random() - 0.5) * 1,
+      angle: Math.random() * Math.PI,
+      spin: (Math.random() - 0.5) * 0.05,
+      type: Math.random() > 0.7 ? 'heart' : 'leaf'
+    }));
+
+    let blink = false;
+    setInterval(() => blink = !blink, 2000);
+
+    let textIndex = 0;
+    const message = "Free ka now?";
+
+    const panda = [
+      [5,1,1,5,5,5,5,5,1,1,5],
+      [1,1,1,1,0,0,0,1,1,1,1],
+      [1,1,0,0,0,0,0,0,0,1,1],
+      [1,0,0,0,0,0,0,0,0,0,1],
+      [0,0,1,1,0,0,0,1,1,0,0],
+      [0,1,1,3,0,0,0,3,1,1,0],
+      [0,1,1,1,0,1,0,1,1,1,0],
+      [5,4,0,0,0,0,0,0,0,4,5],
+      [5,5,5,1,1,1,1,1,1,1,5],
+      [5,5,1,1,0,1,1,0,0,0,0],
+      [5,1,1,1,0,1,0,0,1,1,1],
+      [5,1,1,0,1,1,0,1,1,1,1]
+    ];
+
+    function drawLeaves() {
+      lctx.clearRect(0, 0, leavesCanvas.width, leavesCanvas.height);
+
+      leaves.forEach(leaf => {
+        lctx.save();
+        lctx.translate(leaf.x, leaf.y);
+        lctx.rotate(leaf.angle);
+
+        if (leaf.type === 'leaf') {
+          lctx.fillStyle = 'rgba(34,139,34,0.8)';
+          lctx.beginPath();
+          lctx.ellipse(0, 0, leaf.size, leaf.size * 0.6, 0, 0, Math.PI * 2);
+          lctx.fill();
+        } else {
+          lctx.fillStyle = 'pink';
+          lctx.font = `${leaf.size * 2}px Arial`;
+          lctx.fillText('❤', 0, 0);
+        }
+
+        lctx.restore();
+
+        leaf.y += leaf.speed;
+        leaf.x += leaf.drift;
+        leaf.angle += leaf.spin;
+
+        if (leaf.y > leavesCanvas.height) {
+          leaf.y = -10;
+          leaf.x = Math.random() * leavesCanvas.width;
+        }
+      });
+    }
+
+    function drawPanda() {
+      for (let y = 0; y < panda.length; y++) {
+        for (let x = 0; x < panda[y].length; x++) {
+          let val = panda[y][x];
+
+          // blinking eyes
+          if (blink && y === 5 && (x === 3 || x === 7)) {
+            val = 0;
+          }
+
+          switch(val) {
+            case 0: ctx.fillStyle = '#fff'; break;
+            case 1: ctx.fillStyle = '#000'; break;
+            case 3: ctx.fillStyle = '#888'; break;
+            case 4: ctx.fillStyle = '#ffc0cb'; break;
+            case 5: ctx.fillStyle = 'rgb(0, 115, 0)'; break;
+            default: ctx.fillStyle = '#fff';
+          }
+          ctx.fillRect(x * pixelSize + 100, y * pixelSize + 150, pixelSize, pixelSize);
+        }
+      }
+    }
+
+    function drawSpeechBubble() {
+      ctx.fillStyle = '#fff';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.roundRect(80, 40, 240, 80, 20);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(180, 120);
+      ctx.lineTo(200, 150);
+      ctx.lineTo(160, 120);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#000';
+      ctx.font = '20px Arial';
+      ctx.fillText(message.slice(0, textIndex), 110, 90);
+    }
+
+    function animate() {
+      drawLeaves();
+
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      drawSpeechBubble();
+      drawPanda();
+
+      if (textIndex < message.length) textIndex++;
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>

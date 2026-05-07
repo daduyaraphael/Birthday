@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Lantern Wish</title>
+    <link rel="stylesheet" href="Lantern.css">
+</head>
+<body>
+
+    <!-- Lantern -->
+    <div class="lantern-container">
+        <img src="Cute Photos/Lantern.webp" id="lantern" alt="lantern">
+        <p class="hint">Click the lantern to make a wish ✨</p>
+    </div>
+
+    <!-- Popup -->
+    <div id="wishPopup" class="hidden">
+        <div class="popup-box">
+            <h2>🏮 Your Wish</h2>
+            <p>This is private. Only you can see it.</p>
+
+            <textarea id="wishText" placeholder="Write your wish..."></textarea>
+
+            <button id="launchBtn">Launch Lantern 🏮</button>
+        </div>
+    </div>
+
+    <!-- Fade + Ending -->
+    <div id="fadeScreen"></div>
+
+    <div id="endingScreen" class="hidden">
+        <h1>Thank you 💖</h1>
+        <p>I hope you liked my little gift.</p>
+        <a href="Index.html"><button>Try Again</button></a>
+    </div>
+
+    <script src="Lantern.js"></script>
+</body>
+</html>

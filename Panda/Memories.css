@@ -1,0 +1,176 @@
+body {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+
+    background-image: url('Cute Photos/Background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    margin-left: 85vh;
+    margin-top: -5vh;
+}
+
+h1 {
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+    margin: 0;
+}
+
+p{
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    margin: 0;
+}
+
+.wall{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 40px 50px; 
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 2px solid rgb(0, 0, 0);
+    cursor: pointer;
+    background-color: #ff6f91;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s ease;
+    margin-top: 60vh;
+    margin-left: 150vh;
+}
+
+button:hover {
+    background-color: #ff91ac;
+    transform: scale(1.08);
+}
+
+a{
+    text-decoration: none;
+}
+
+/* ===== HEARTS ===== */
+#hearts-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.heart {
+    position: absolute;
+    color: #ff6f91;
+    animation-name: fall;
+    animation-timing-function: linear;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateX(0) translateY(-50px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(var(--sway)) translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ===== GALLERY ===== */
+.gallery {
+    position: relative;
+    z-index: 2;
+    margin-top: 8vh;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 60px;
+    padding: 60px;
+    justify-items: center;
+}
+
+/* BIGGER Polaroid */
+.photo-card {
+    width: 200px;
+    height: 260px;
+    position: absolute; /* important for animation */
+    perspective: 1000px;
+    cursor: pointer;
+    transition: all 1.2s ease;
+}
+
+/* Flip container */
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+/* Flip */
+.photo-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Front & Back */
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    backface-visibility: hidden;
+    background: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    padding: 10px;
+}
+
+/* Image */
+.card-front img {
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+/* Polaroid bottom */
+.card-front::after {
+    content: "";
+    display: block;
+    height: 20%;
+    background: white;
+}
+
+/* Back */
+.card-back {
+    transform: rotateY(180deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    text-align: center;
+    font-family: sans-serif;
+}
